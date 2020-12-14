@@ -1,0 +1,55 @@
+openapi: "3.0.1"
+info:
+  title:
+    Ref: AWS::StackName
+  description: ComputelessBlog
+paths:
+  /{path+}:
+    get:
+      responses:
+        200:
+          description: "200 response"
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        credentials:
+          Fn::GetAtt: [RestAPIRole, Arn]
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/Query"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              text/html: |
+                #set($items = $input.path('$.Items'))
+                Heading: $items[0].heading.S <br>
+                Description: $items[0].description.S <br>
+                Date: $items[0].date.S <br>
+                Content: $items[0].content.S
+        requestTemplates:
+          application/json:
+            Fn::Join:
+              - ''
+              - - >-
+                  {"TableName": "
+                - Ref: AWS::StackName
+                - >-
+                  "
+                - |
+                  ,
+                  "KeyConditionExpression": "pk = :pk and sk = :sk",
+                  "ExpressionAttributeValues": {
+                      ":pk": {"S": "article"},
+                      ":sk": {"S": "/$input.params('path')"}
+                    }
+                  }
+        passthroughBehavior: "never"
+        httpMethod: "POST"
+components:
+  schemas:
+    Empty:
+      type: object
+      title: Empty Schema
+      description: Empty Schema
