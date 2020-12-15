@@ -6,6 +6,14 @@ Globals:
   Api:
     OpenApiVersion: "3.0.1"
 
+Mappings:
+  ResponseTemplates:
+    Page:
+      Fn::Transform:
+        Name: AWS::Include
+        Parameters:
+          Location: 'page.yaml'
+
 Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
