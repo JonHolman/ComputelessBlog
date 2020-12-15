@@ -4,6 +4,46 @@ info:
     Ref: AWS::StackName
   description: ComputelessBlog
 paths:
+  /:
+    get:
+      responses:
+        200:
+          description: "200 response"
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        credentials:
+          Fn::GetAtt: [RestAPIRole, Arn]
+        uri: "arn:aws:apigateway:us-east-1:dynamodb:action/Query"
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              text/html:
+                Fn::FindInMap: [ ResponseTemplates, Page, VTL ]
+        requestTemplates:
+          application/json:
+            Fn::Join:
+              - ''
+              - - >-
+                  {"TableName": "
+                - Ref: AWS::StackName
+                - >-
+                  "
+                - |
+                  ,
+                  "IndexName": "ItemTypeByDate",
+                  "KeyConditionExpression": "pk = :pk",
+                  "ExpressionAttributeValues": {
+                      ":pk": {"S": "article"}
+                  },
+                  "ScanIndexForward": false
+                  }
+        passthroughBehavior: "never"
+        httpMethod: "POST"
   /{path+}:
     get:
       responses:
