@@ -42,10 +42,20 @@ VTL: |
 
   <!-- Blog entries -->
   <div class="w3-col l8 s12">
+  #if($type =='article')
     <!-- Blog entry -->
     <div class="w3-card-4 w3-margin w3-white">
       <div class="w3-container">
-        <h3><b>$items[0].heading.S</b></h3>
+        <h3>
+        #set($buildingPath = '')
+        #foreach($pathPiece in $items[0].sk.S.split('/'))
+          #if(!$foreach.first and !$foreach.last)
+            #set($buildingPath = "${buildingPath}/${pathPiece}")
+            <a href="$buildingPath">$pathPiece > </a>
+          #end
+        #end
+        <b>$items[0].heading.S</b>
+        </h3>
         <h5>$items[0].description.S, <span class="w3-opacity">$items[0].date.S</span></h5>
       </div>
 
@@ -53,8 +63,51 @@ VTL: |
         $items[0].content.S
       </div>
     </div>
+  </div>
+  #else
+    #foreach( $item in $items )
+      <div class="w3-card-4 w3-margin w3-white">
+      <div class="w3-container">
+      <h3>
+      #set($buildingPath = '')
+      #foreach($pathPiece in $item.sk.S.split('/'))
+        #if(!$foreach.first and !$foreach.last)
+          #set($buildingPath = "${buildingPath}/${pathPiece}")
+          <a href="$buildingPath">$pathPiece > </a>
+        #end
+      #end
+      <b>$item.heading.S</b>
+      </h3>
+      #if(!$item.description.isEmpty())
+        <h5>$item.description.S<br/><span class="w3-opacity">$item.date.S</span></h5>
+      #end
+      </div>
+      <div class="w3-container">
+      $item.content.S.split("</p>")[0]</p>
+      #if(!$item.sk.isEmpty())
+        <p>...</p>
+        <div class="w3-row">
+        <div class="w3-col m8 s12">
+        <p>
+        <a href="$item.sk.S">
+        <button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE</b></button>
+        </a>
+        </p>
+        </div>
+        <div class="w3-col m4 w3-hide-small">
+        <p><span class="w3-padding-large w3-right"><b>Comments</b> <span data-sk="$util.urlEncode($item.sk.S)" class="w3-tag numComments">0</span></span></p>
+        </div>
+        </div>
+      #end
+      </div>
+      </div>
+      #if( $foreach.hasNext )
+        <hr>
+      #end
+    #end
   <!-- END BLOG ENTRIES -->
   </div>
+  #end
 
   <!-- Introduction menu -->
   <div class="w3-col l4">
