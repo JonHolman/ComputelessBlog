@@ -11,7 +11,13 @@ VTL: |
   #end
   <!DOCTYPE html>
   <html>
-  <title>W3.CSS Template - $items[0].heading.S</title>
+  #if($type =='article')
+    <title>W3.CSS Template - $items[0].heading.S</title>
+  #elseif($context.path.split('/').size() > 2)
+    <title>W3.CSS Template - $context.path.split('/')[-1] category</title>
+  #else
+    <title>W3.CSS Template</title>
+  #end
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
