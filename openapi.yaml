@@ -22,12 +22,8 @@ paths:
           default:
             statusCode: "200"
             responseTemplates:
-              text/html: |
-                #set($items = $input.path('$.Items'))
-                Heading: $items[0].heading.S <br>
-                Description: $items[0].description.S <br>
-                Date: $items[0].date.S <br>
-                Content: $items[0].content.S
+              text/html:
+                Fn::FindInMap: [ ResponseTemplates, Page, VTL ]
         requestTemplates:
           application/json:
             Fn::Join:
