@@ -1,5 +1,14 @@
 VTL: |
   #set($items = $input.path('$.Items'))
+  #set($count = $items.size())
+  #if($count == 0)
+    #set($context.responseOverride.status = 404)
+    #set($_ = $items.add( {'heading':{'S':'Page not found'},'content': {'S':'<p><a href="/"><button>Go to the Home Page</button></a></p>'}} ))
+  #elseif($count == 1 and $context.path.contains($items[0].sk.S))
+    #set($type = 'article')
+  #else
+    #set($type = 'category')
+  #end
   <!DOCTYPE html>
   <html>
   <title>W3.CSS Template - $items[0].heading.S</title>
