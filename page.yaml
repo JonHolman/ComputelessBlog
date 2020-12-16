@@ -56,7 +56,9 @@ VTL: |
         #end
         <b>$items[0].heading.S</b>
         </h3>
-        <h5>$items[0].description.S, <span class="w3-opacity">$items[0].date.S</span></h5>
+        #if(!$items[0].description.isEmpty())
+          <h5>$items[0].description.S, <span class="w3-opacity">$items[0].date.S</span></h5>
+        #end
       </div>
 
       <div class="w3-container">
