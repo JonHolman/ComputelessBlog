@@ -3,7 +3,7 @@ VTL: |
   #set($count = $items.size())
   #if($count == 0)
     #set($context.responseOverride.status = 404)
-    #set($_ = $items.add( {'heading':{'S':'Page not found'},'content': {'S':'<p><a href="/Prod/"><button>Go to the Home Page</button></a></p>'}} ))
+    #set($_ = $items.add( {'heading':{'S':'Page not found'},'content': {'S':'<p><a href="/"><button>Go to the Home Page</button></a></p>'}} ))
   #elseif($count == 1 and $context.path.contains($items[0].sk.S))
     #set($type = 'article')
   #else
@@ -51,7 +51,7 @@ VTL: |
         #foreach($pathPiece in $items[0].sk.S.split('/'))
           #if(!$foreach.first and !$foreach.last)
             #set($buildingPath = "${buildingPath}/${pathPiece}")
-            <a href="/Prod$buildingPath">$pathPiece > </a>
+            <a href="$buildingPath">$pathPiece > </a>
           #end
         #end
         <b>$items[0].heading.S</b>
@@ -75,10 +75,10 @@ VTL: |
       #foreach($pathPiece in $item.sk.S.split('/'))
         #if(!$foreach.first and !$foreach.last)
           #set($buildingPath = "${buildingPath}/${pathPiece}")
-          <a href="/Prod$buildingPath">$pathPiece > </a>
+          <a href="$buildingPath">$pathPiece > </a>
         #end
       #end
-      <a href="/Prod$item.sk.S"><b>$item.heading.S</b></a>
+      <a href="$item.sk.S"><b>$item.heading.S</b></a>
       </h3>
       #if(!$item.description.isEmpty())
         <h5>$item.description.S<br/><span class="w3-opacity">$item.date.S</span></h5>
@@ -91,7 +91,7 @@ VTL: |
         <div class="w3-row">
         <div class="w3-col m8 s12">
         <p>
-        <a href="/Prod$item.sk.S">
+        <a href="$item.sk.S">
         <button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE</b></button>
         </a>
         </p>
