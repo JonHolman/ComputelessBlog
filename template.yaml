@@ -99,3 +99,6 @@ Resources:
 Outputs:
   WebSiteOrigin:
     Value: !Sub https://${RestAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod
+
+  CloudFrontDistribution:
+    Value: !Sub https://${CloudFrontDistribution.DomainName}/
