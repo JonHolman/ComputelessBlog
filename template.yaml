@@ -77,6 +77,25 @@ Resources:
           Parameters:
             Location: './openapi.yaml'
 
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: apiGatewayRestApi
+            DomainName: !Sub ${RestAPI}.execute-api.${AWS::Region}.amazonaws.com
+            OriginPath: /Prod
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        Enabled: true
+        DefaultCacheBehavior:
+          Compress: True
+          ForwardedValues:
+            QueryString: false
+          DefaultTTL: 600 # in seconds (600 = 10 minutes)
+          TargetOriginId: apiGatewayRestApi
+          ViewerProtocolPolicy: redirect-to-https
+
 Outputs:
   WebSiteOrigin:
     Value: !Sub https://${RestAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod
