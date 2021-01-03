@@ -134,3 +134,8 @@ Outputs:
 
   CloudFrontDistribution:
     Value: !Sub https://${CloudFrontDistribution.DomainName}/
+
+  DnsTaskToDo:
+    Condition: CreateDnsAlias
+    Value: !Sub CNAME ${CloudFrontDnsAlias} to ${CloudFrontDistribution.DomainName}
+    Description: DNS TODO Task
