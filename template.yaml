@@ -6,6 +6,25 @@ Globals:
   Api:
     OpenApiVersion: "3.0.1"
 
+Parameters:
+  CloudFrontDnsAlias:
+    Type: String
+  AcmCertArn:
+    Type: String
+
+Conditions:
+  HasCloudFrontDnsAlias: !Not
+    - !Equals
+      - !Ref CloudFrontDnsAlias
+      - ''
+  HasAcmCertArn: !Not
+    - !Equals
+      - !Ref AcmCertArn
+      - ''
+  CreateDnsAlias: !And
+    - !Condition HasCloudFrontDnsAlias
+    - !Condition HasAcmCertArn
+
 Mappings:
   ResponseTemplates:
     Page:
